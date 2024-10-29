@@ -3,6 +3,7 @@ import isEmail from "validator/lib/isEmail.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
+import Task from "./Task";
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -92,11 +93,15 @@ userSchema.methods.toJSON = function () {
 
 userSchema.pre("save", async function (next) {
   const user = this;
-
   if (user.isModified("password")) {
     user.password = await bcrypt.hash(user.password, 10);
   }
+  next();
+});
 
+userSchema.pre("remove", async function (next) {
+  const user = this;
+  await Task.deleteMany({ owner: user._id });
   next();
 });
 
