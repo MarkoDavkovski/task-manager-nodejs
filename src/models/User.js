@@ -3,7 +3,7 @@ import isEmail from "validator/lib/isEmail.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
-import Task from "./Task";
+import Task from "./Task.js";
 
 const userSchema = new mongoose.Schema({
   name: {
