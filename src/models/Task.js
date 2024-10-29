@@ -10,9 +10,14 @@ const taskSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
 });
 
-taskSchema.pre("save", function () {
+taskSchema.pre("save", function (next) {
   const task = this;
   /// middleware logic
   next();

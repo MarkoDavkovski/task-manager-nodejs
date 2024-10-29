@@ -1,5 +1,6 @@
 import express from "express";
 import Task from "../models/Task.js";
+import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -12,7 +13,7 @@ router.get("/tasks", async (req, res) => {
   }
 });
 
-router.get("/tasks/:id", async (req, res) => {
+router.get("/tasks/:id", auth, async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
     if (!task) return res.status(404).send("Task not found.");
@@ -22,8 +23,11 @@ router.get("/tasks/:id", async (req, res) => {
   }
 });
 
-router.post("/tasks", async (req, res) => {
-  const task = new Task(req.body);
+router.post("/tasks", auth, async (req, res) => {
+  const task = new Task({
+    ...req.body,
+    owner: req.user._id,
+  });
   try {
     await task.save();
     res.status(201).send(task);
