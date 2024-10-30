@@ -1,21 +1,26 @@
 import mongoose from "mongoose";
 
-const taskSchema = new mongoose.Schema({
-  description: {
-    type: String,
-    trim: true,
-    required: true,
+const taskSchema = new mongoose.Schema(
+  {
+    description: {
+      type: String,
+      trim: true,
+      required: true,
+    },
+    completed: {
+      type: Boolean,
+      default: false,
+    },
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
-  completed: {
-    type: Boolean,
-    default: false,
-  },
-  owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
 taskSchema.pre("save", function (next) {
   const task = this;

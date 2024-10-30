@@ -3,10 +3,27 @@ import Task from "../models/Task.js";
 import auth from "../middleware/auth.js";
 
 const router = express.Router();
-
+// GET /tasks?completed=true
+// GET /tasks?limit=10&skip=0
+// GET /tasks?sortBy=createdAt:desc
 router.get("/tasks", auth, async (req, res) => {
+  const match = { owner: req.user._id };
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = parseInt(req.query.skip) || 0;
+  const sort = {};
+
+  if (req.query.sortBy) {
+    const parts = req.query.sortBy.split(":");
+    sort[parts[0]] = parts[1] === "desc" ? -1 : 1;
+    console.log(sort);
+  }
+
+  if (req.query.completed) {
+    match.completed = req.query.completed === "true";
+  }
+
   try {
-    const tasks = await Task.find({ owner: req.user._id });
+    const tasks = await Task.find(match).limit(limit).skip(skip).sort(sort);
     res.send(tasks);
   } catch (error) {
     res.status(500).send(error);
