@@ -122,15 +122,19 @@ router.post(
   auth,
   upload.single("avatar"),
   async (req, res) => {
-    const buffer = await sharp(req.file.buffer)
-      .resize({ width: 250, height: 250 })
-      .png()
-      .toBuffer();
+    try {
+      const buffer = await sharp(req.file.buffer)
+        .resize({ width: 250, height: 250 })
+        .png()
+        .toBuffer();
 
-    req.user.avatar = buffer;
+      req.user.avatar = buffer;
 
-    await req.user.save();
-    res.send();
+      await req.user.save();
+      res.send();
+    } catch (error) {
+      res.status(400).send();
+    }
   },
   (error, req, res, next) => {
     res.status(400).send({ error: error.message });
