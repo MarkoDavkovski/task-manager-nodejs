@@ -54,6 +54,9 @@ const userSchema = new mongoose.Schema(
         },
       },
     ],
+    avatar: {
+      type: Buffer,
+    },
   },
   {
     timestamps: true,
@@ -92,8 +95,11 @@ userSchema.methods.generateAuthToken = async function () {
 userSchema.methods.toJSON = function () {
   const user = this;
   const userObj = user.toObject();
+
   delete userObj.password;
   delete userObj.tokens;
+  delete userObj.avatar;
+
   return userObj;
 };
 
