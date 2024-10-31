@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 import isEmail from "validator/lib/isEmail.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import "dotenv/config";
 import Task from "./Task.js";
+import config from "../config/config.js";
 
 const userSchema = new mongoose.Schema(
   {
@@ -80,13 +80,9 @@ userSchema.statics.findByCredentials = async (email, password) => {
 
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
-  const token = jwt.sign(
-    { _id: user._id.toString() },
-    process.env.JWT_SECRET_KEY,
-    {
-      expiresIn: "1h",
-    }
-  );
+  const token = jwt.sign({ _id: user._id.toString() }, config.jwtSecretKey, {
+    expiresIn: "1h",
+  });
   user.tokens = user.tokens.concat({ token });
   await user.save();
   return token;
