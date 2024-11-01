@@ -4,13 +4,8 @@ import app from "../src/app.js";
 import {
   authorizationHeader,
   setupDatabase,
-  userOne,
-  userOneId,
   userTwo,
-  userTwoId,
   taskOne,
-  taskTwo,
-  taskThree,
 } from "./fixtures/db.js";
 
 beforeEach(setupDatabase);

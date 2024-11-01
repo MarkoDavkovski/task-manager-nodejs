@@ -6,10 +6,7 @@ import {
   TEST_USER_EMAIL,
   TEST_USER_PASSWORD,
   PROFILE_PIC_PATH,
-  userOne,
   userOneId,
-  userTwo,
-  userTwoId,
   setupDatabase,
 } from "./fixtures/db.js";
 
